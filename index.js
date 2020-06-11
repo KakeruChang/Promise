@@ -38,40 +38,6 @@ function myPromise(exector) {
   }
 }
 
-// function myPromise(exector) {
-//   const vm = this;
-//   this.value = null;
-//   this.reason = null;
-//   this.status = status.pending;
-//   this.resolvedCallbacks = [];
-//   this.rejectedCallbacks = [];
-
-//   // success
-//   function resolve(value) {
-//     if (vm.status === status.pending) {
-//       vm.value = value;
-//       vm.status = status.resolve;
-//       vm.resolvedCallbacks.forEach((fn) => fn());
-//     }
-//   }
-
-//   // fail
-//   function reject(reason) {
-//     if (vm.status === status.pending) {
-//       vm.reason = reason;
-//       vm.status = status.reject;
-//       vm.rejectedCallbacks.forEach((fn) => fn());
-//     }
-//   }
-
-//   // error
-//   try {
-//     exector(resolve, reject);
-//   } catch (error) {
-//     reject(error);
-//   }
-// }
-
 myPromise.prototype.then = function (onFulfilled, onRejected) {
   // check the type of onFulfilled, onRejected
   onFulfilled =
@@ -186,6 +152,45 @@ myPromise.prototype.then = function (onFulfilled, onRejected) {
   });
 
   return promiseNew;
+};
+
+myPromise.prototype.catch = function (onRejected) {
+  return this.then(null, onRejected);
+};
+
+myPromise.resolve = function (value) {
+  return new myPromise((resolve, reject) => {
+    resolve(value);
+  });
+};
+myPromise.reject = function (reason) {
+  return new myPromise((resolve, reject) => {
+    reject(reason);
+  });
+};
+
+myPromise.race = function (promiseArray) {
+  return new myPromise((resolve, reject) => {
+    for (let i = 0; i < promiseArray.length; i += 1) {
+      promiseArray[i].then(resolve, reject);
+    }
+  });
+};
+
+myPromise.all = function (promiseArray) {
+  return new myPromise((resolve, reject) => {
+    const result = [];
+    let count = 0;
+
+    for (let i = 0; i < promiseArray.length; i += 1) {
+      promiseArray[i].then((data) => {
+        result[i] = data;
+        if (promiseArray.length === ++count) {
+          resolve(result);
+        }
+      }, reject);
+    }
+  });
 };
 
 const test1 = new myPromise((resolve, reject) => {
