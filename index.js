@@ -228,3 +228,13 @@ test
     if (result != undefined && result != "") console.log("get the data");
     console.log(result);
   });
+
+myPromise.deferred = function () {
+  let defer = {};
+  defer.promise = new myPromise((resolve, reject) => {
+    defer.resolve = resolve;
+    defer.reject = reject;
+  });
+  return defer;
+};
+module.exports = myPromise;

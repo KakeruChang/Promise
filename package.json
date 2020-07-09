@@ -1,0 +1,14 @@
+{
+  "name": "promise",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/KakeruChang/Promise.git",
+  "author": "Jim <b97201019@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "promises-aplus-tests": "^2.1.2"
+  },
+  "scripts": {
+    "start": "promises-aplus-tests index.js"
+  }
+}
