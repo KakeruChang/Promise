@@ -25,7 +25,7 @@ function myPromise(exector) {
   function reject(reason) {
     if (vm.status === status.pending) {
       vm.reason = reason;
-      vm.status = status.reject;
+      vm.status = status.rejected;
       vm.rejectedCallbacks.forEach((fn) => fn());
     }
   }
